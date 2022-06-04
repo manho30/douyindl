@@ -38,7 +38,7 @@ def download(message):
         r = requests.get('https://douyinapi.herokuapp.com/api?url='+url)
         r = json.loads(r.text)
         try:
-            if r['ok'] == True:
+            #if r['ok'] == True:
 
                 # this is video
                 uploading = bot.edit_message_text(chat_id=message.chat.id,
@@ -55,25 +55,31 @@ def download(message):
                     # 1080p is bigger than 50mb, try upload with 720p
                     reuploading = bot.edit_message_text(chat_id=message.chat.id,
                                                             message_id=uploading.message_id,
-                                                            text='⚠️视频大于50MB，正在重新上传...')
+                                                            text='⚠️视频大于50MB，正在尝试重新上传...')
                     try:
                         # retry with 720p
                         bot.send_chat_action(message.chat.id, 'upload_video')
                         bot.send_video(message.chat.id,
-                                            r['result']['video']['video_url']['free_watermark_720p'],
+                                            r['result']['video']['video_url']['free_watermark'],
                                             caption=r['result']['video']['descriptions'])
                         bot.reply_to(message, '✅视频上传成功...')
                         bot.delete_message(message.chat.id, reuploading.message_id)
                     except:
-                        # 720p is bigger than 50mb, upload failed
-                        bot.edit_message_text(chat_id=message.chat.id,
-                                                    message_id=reuploading.message_id,
-                                                    text='❌上传失败...')
+                        # 720p is bigger than 50mb, upload failed, send a shorten link to user
+                        shorten = requests.get('https://cutt.ly/api/api.php?key={}&short={}'.format('cfce60a1a0e5aeb95dac99ebdc3cc6299ede9', r['result']['video']['video_url']['free_watermark_1080p']))
+                        shorten = json.loads(shorten.text)
+                        try:
+                            bot.edit_message_text('因视频庞大无法上传， 请点击以下链接自行下载：\n{}'.format(shorten['url']['shortLink']).replace('/\'', ''),
+                                                  message.chat.id, reuploading.message_id,)
+                        except:
+                            bot.edit_message_text(chat_id=message.chat.id,
+                                                      message_id=reuploading.message_id,
+                                                      text='❌上传失败...')
             # api return error
-            else:
-                bot.edit_message_text(chat_id=message.chat.id,
-                                            message_id=wait.message_id,
-                                            text='❌上传失败...')
+            #else:
+                #bot.edit_message_text(chat_id=message.chat.id,
+                                            #message_id=wait.message_id,
+                                            #text='❌上传失败...')
         except: 
             # this is picture
             bot.send_chat_action(message.chat.id, 'upload_photo')

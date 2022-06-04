@@ -13,4 +13,3 @@ def find_url(string):
     return url
     
 # debug
-print(find_url('vkyjgkivutk'))

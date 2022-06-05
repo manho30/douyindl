@@ -48,7 +48,7 @@ def download(message):
                     bot.send_chat_action(message.chat.id, 'upload_video')
                     bot.send_video(message.chat.id,
                                         r['result']['video']['video_url']['free_watermark_1080p'],
-                                        caption=r['result']['video']['descriptions'])
+                                        caption='{} - {}'.format(r['result']['author']['name'], r['result']['video']['descriptions']))
                     bot.reply_to(message, '✅视频上传成功...')
                     bot.delete_message(message.chat.id, uploading.message_id)
                 except:

@@ -1,7 +1,7 @@
 import json
 import telebot 
 import requests
-from helper import fing_url
+from helper import find_url
 import os
 
 bot = telebot.TeleBot('INSERT_YOUR_CODE', parse_mode=None)

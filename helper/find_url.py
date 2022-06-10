@@ -11,5 +11,3 @@ def find_url(string):
     except:
         url = None
     return url
-    
-# debug

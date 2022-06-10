@@ -77,8 +77,8 @@ def download(message):
             # api return error
             else:
                 bot.edit_message_text(chat_id=message.chat.id,
-                                            #message_id=wait.message_id,
-                                            #text='❌上传失败...')
+                                      message_id=wait.message_id,
+                                      text='❌上传失败...')
         except: 
             # this is picture
             bot.send_chat_action(message.chat.id, 'upload_photo')

@@ -4,8 +4,7 @@ import requests
 from helper import fing_url
 import os
 
-bot = telebot.TeleBot(
-    '5556435695:AAEmgti4cF4IRi7BVb_d1v3ZXY6AlQyTpjU', parse_mode=None)
+bot = telebot.TeleBot('INSERT_YOUR_CODE', parse_mode=None)
 
 
 @bot.message_handler(commands=['start'])
@@ -38,7 +37,7 @@ def download(message):
         r = requests.get('https://douyinapi.herokuapp.com/api?url='+url)
         r = json.loads(r.text)
         try:
-            #if r['ok'] == True:
+            if r['ok'] == True:
 
                 # this is video
                 uploading = bot.edit_message_text(chat_id=message.chat.id,
@@ -76,8 +75,8 @@ def download(message):
                                                       message_id=reuploading.message_id,
                                                       text='❌上传失败...')
             # api return error
-            #else:
-                #bot.edit_message_text(chat_id=message.chat.id,
+            else:
+                bot.edit_message_text(chat_id=message.chat.id,
                                             #message_id=wait.message_id,
                                             #text='❌上传失败...')
         except: 

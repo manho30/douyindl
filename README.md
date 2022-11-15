@@ -32,4 +32,4 @@ $ python bot.py
 ## Deploy to Heroku
 You may also deploy to Heroku as you like.
 
-Check out this [Video](https://youtu.be/_WxRbxK2CIA) for more information.
+Check out this [Video](https://youtu.be/_WxRbxK2ClA) for more information.

@@ -1,11 +1,9 @@
 import json
 import os
 
-
 import requests
 import telebot
 from telebot import types
-
 
 from helper import find_url
 from api import scraper
@@ -13,7 +11,7 @@ from api import scraper
 # init the scraper
 douyinClient = scraper.Douyin()
 
-bot = telebot.TeleBot('5556435695:AAEmgti4cF4IRi7BVb_d1v3ZXY6AlQyTpjU', parse_mode=None)
+bot = telebot.TeleBot('PLACE_UR_TOKEN_HERE', parse_mode=None)
 
 
 # answer inline query
@@ -40,7 +38,8 @@ def send_welcome(message):
 def send_help(message):
     bot.send_chat_action(message.chat.id, 'typing')
     bot.reply_to(message,
-                 'The operating principle of this bot is to request to the packaged API interface and then upload to Telegram\n\n'
+                 'The operating principle of this bot is to request to the packaged API interface and then upload to '
+                 'Telegram\n\n '
                  'Source code: https://github.com/manho30/douyindlbot\n'
                  'API: https://github.com/manho30/douyinapi\n'
                  'Documentation: https://manho30.github.io/douyinapi/')
@@ -59,7 +58,7 @@ def download(message):
         r = douyinClient.douyin(url=url)
         # r = json.loads(r.text)
         try:
-            if r['ok'] == True:
+            if r['ok']:
 
                 # this is video
                 uploading = bot.edit_message_text(chat_id=message.chat.id,
@@ -76,7 +75,7 @@ def download(message):
                     bot.delete_message(message.chat.id, uploading.message_id)
                 except:
                     # 1080p is bigger than 50mb, try upload with 720p
-                    reuploading = bot.edit_message_text(chat_id=message.chat.id,
+                    preloading = bot.edit_message_text(chat_id=message.chat.id,
                                                         message_id=uploading.message_id,
                                                         text='⚠️视频大于50MB，正在尝试重新上传...')
                     try:
@@ -87,7 +86,7 @@ def download(message):
                                        caption='{} - {}'.format(r['result']['author']['name'],
                                                                 r['result']['video']['descriptions']))
                         bot.reply_to(message, '✅视频上传成功...')
-                        bot.delete_message(message.chat.id, reuploading.message_id)
+                        bot.delete_message(message.chat.id, preloading.message_id)
                     except:
                         # 720p is bigger than 50mb, upload failed, send a shorten link to user
                         shorten = requests.get('https://cutt.ly/api/api.php?key={}&short={}'.format(
@@ -97,10 +96,10 @@ def download(message):
                         try:
                             bot.edit_message_text('因视频庞大无法上传， 请点击以下链接自行下载：\n{}'.format(
                                 shorten['url']['shortLink']).replace('/\'', ''),
-                                                  message.chat.id, reuploading.message_id, )
+                                                  message.chat.id, preloading.message_id, )
                         except:
                             bot.edit_message_text(chat_id=message.chat.id,
-                                                  message_id=reuploading.message_id,
+                                                  message_id=preloading.message_id,
                                                   text='❌上传失败...')
             # api return error
             else:

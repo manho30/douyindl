@@ -7,11 +7,12 @@ from telebot import types
 
 from helper import find_url
 from api import scraper
+from config import TOKEN
 
 # init the scraper
 douyinClient = scraper.Douyin()
 
-bot = telebot.TeleBot('PLACE_UR_TOKEN_HERE', parse_mode=None)
+bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
 
 # answer inline query
